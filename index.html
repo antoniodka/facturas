@@ -1,78 +1,95 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pagos de Servicios</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: #f2f2f2;
-      padding: 20px;
+      background: #f9f9f9;
+      padding: 10px;
       margin: 0;
     }
     h2 {
       text-align: center;
       color: #2c3e50;
-      margin-bottom: 30px;
+      margin: 20px 0;
+      font-size: 22px;
     }
     .servicio {
       background-color: #fff;
       border-radius: 12px;
-      padding: 20px;
+      padding: 16px;
       margin-bottom: 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
     .servicio h3 {
-      margin-top: 0;
       color: #34495e;
-      font-size: 20px;
-      margin-bottom: 15px;
+      font-size: 18px;
+      margin-bottom: 12px;
     }
     .item {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 12px 0;
-      font-size: 16px;
-      border-bottom: 1px solid #eee;
-      padding-bottom: 10px;
-    }
-    .item:last-child {
-      border-bottom: none;
-    }
-    .info {
-      display: flex;
       flex-direction: column;
+      margin-bottom: 16px;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    .tipo {
+      font-size: 14px;
+      color: #555;
     }
     .codigo {
       font-weight: bold;
-      color: #555;
       font-size: 15px;
+      color: #222;
     }
-    .tipo {
-      color: #888;
+    input.copy-code {
+      margin-top: 6px;
+      padding: 6px 10px;
       font-size: 14px;
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #fdfdfd;
     }
     .link-boton {
       background-color: #007bff;
       color: white;
-      padding: 6px 12px;
+      padding: 10px;
       border: none;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 14px;
-      text-decoration: none;
+      font-size: 15px;
+      margin-top: 5px;
     }
     .link-boton:hover {
       background-color: #0056b3;
     }
+    .estado {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    .estado label {
+      margin-right: 12px;
+    }
     #visor {
       width: 100%;
-      height: 600px;
+      height: 500px;
       border: 2px solid #ccc;
-      margin-top: 30px;
+      margin-top: 20px;
       border-radius: 10px;
       display: none;
+    }
+    .pagada {
+      background-color: #d4edda;
+      border-left: 5px solid #28a745;
+    }
+    .falta {
+      background-color: #f8d7da;
+      border-left: 5px solid #dc3545;
     }
   </style>
 </head>
@@ -80,77 +97,170 @@
 
 <h2>💡 Mis Servicios</h2>
 
-<div class="servicio">
-  <h3>Bodega Pequeña</h3>
-  <div class="item">
-    <div class="info">
-      <span class="tipo">🔥 Gas</span>
-      <span class="codigo">Código: 62845149</span>
-    </div>
-    <button class="link-boton" onclick="copiarYMostrar('62845149', 'https://pagosenlinea.grupovanti.com/')">Pagar</button>
-  </div>
-  <div class="item">
-    <div class="info">
-      <span class="tipo">💡 Luz</span>
-      <span class="codigo">Código: 10403</span>
-    </div>
-    <button class="link-boton" onclick="copiarYMostrar('10403', 'https://www.essa.com.co/site/mi-factura/consulta-y-descarga-tu-factura/consulta-tu-factura')">Pagar</button>
-  </div>
-  <div class="item">
-    <div class="info">
-      <span class="tipo">💧 Agua</span>
-      <span class="codigo">Código: 012785</span>
-    </div>
-    <button class="link-boton" onclick="copiarYMostrar('012785', 'https://www.amb.com.co:8444/amb/facturaambcel.aspx')">Pagar</button>
-  </div>
-</div>
+<!-- Sección generada automáticamente -->
+<div id="contenedor-servicios"></div>
 
-<div class="servicio">
-  <h3>Bodega Grande</h3>
-  <div class="item">
-    <div class="info">
-      <span class="tipo">🔥 Gas</span>
-      <span class="codigo">Código: 00000</span>
-    </div>
-    <button class="link-boton" onclick="copiarYMostrar('00000', 'https://pagosenlinea.grupovanti.com/')">Pagar</button>
-  </div>
-  <div class="item">
-    <div class="info">
-      <span class="tipo">💡 Luz</span>
-      <span class="codigo">Código: 9847</span>
-    </div>
-    <button class="link-boton" onclick="copiarYMostrar('9847', 'https://www.essa.com.co/site/mi-factura/consulta-y-descarga-tu-factura/consulta-tu-factura')">Pagar</button>
-  </div>
-  <div class="item">
-    <div class="info">
-      <span class="tipo">💧 Agua</span>
-      <span class="codigo">Código: 012680</span>
-    </div>
-    <button class="link-boton" onclick="copiarYMostrar('012680', 'https://www.amb.com.co:8444/amb/facturaambcel.aspx')">Pagar</button>
-  </div>
-</div>
-
-<!-- Visor -->
+<h2 id="titulo-visor" style="display:none; text-align:center; margin-top:30px; font-size:20px; color:#333;"></h2>
 <iframe id="visor"></iframe>
 
 <script>
-  function copiarYMostrar(codigo, url) {
-    // Copiar código
-    const tempInput = document.createElement("textarea");
-    tempInput.value = codigo;
-    document.body.appendChild(tempInput);
-    tempInput.select();
-    tempInput.setSelectionRange(0, 99999);
-    document.execCommand("copy");
-    document.body.removeChild(tempInput);
+const servicios = {
+  "Casa": [
+    ["🔥 Gas", "62990486", "https://pagosenlinea.grupovanti.com/", "gas_casa"],
+    ["💡 Luz", "4914", "https://www.essa.com.co/site/mi-factura/consulta-y-descarga-tu-factura/consulta-tu-factura", "luz_casa"],
+    ["💧 Agua", "004074", "https://www.amb.com.co:8444/amb/facturaambcel.aspx", "agua_casa"]
+  ],
+  "Bodega Grande": [
+    ["🔥 Gas", "00000", "https://pagosenlinea.grupovanti.com/", "gas_bodega_grande"],
+    ["💡 Luz", "9847", "https://www.essa.com.co/site/mi-factura/consulta-y-descarga-tu-factura/consulta-tu-factura", "luz_bodega_grande"],
+    ["💧 Agua", "012680", "https://www.amb.com.co:8444/amb/facturaambcel.aspx", "agua_bodega_grande"]
+  ],
+  "Bodega Pequeña": [
+    ["🔥 Gas", "62845149", "https://pagosenlinea.grupovanti.com/", "gas_bodega_pequena"],
+    ["💡 Luz", "10403", "https://www.essa.com.co/site/mi-factura/consulta-y-descarga-tu-factura/consulta-tu-factura", "luz_bodega_pequena"],
+    ["💧 Agua", "012785", "https://www.amb.com.co:8444/amb/facturaambcel.aspx", "agua_bodega_pequena"]
+  ]
+};
 
-    // Mostrar iframe
-    const visor = document.getElementById("visor");
-    visor.style.display = "block";
-    visor.src = url;
+const contenedor = document.getElementById("contenedor-servicios");
 
-    alert("Código copiado. Puedes pegarlo en la página de pago aquí abajo.");
+for (const [seccion, items] of Object.entries(servicios)) {
+  const div = document.createElement("div");
+  div.className = "servicio";
+  div.innerHTML = `<h3>${seccion}</h3>`;
+  items.forEach(([tipo, codigo, link, id]) => {
+    div.innerHTML += `
+    <div class="item" data-id="${id}">
+      <div class="info">
+        <span class="tipo">${tipo}</span>
+        <span class="codigo">Código: ${codigo}</span>
+        <input type="text" readonly value="${codigo}" onclick="this.select()" class="copy-code">
+      </div>
+      <button class="link-boton" onclick="copiarYMostrar('${codigo}', '${link}', '${id}')">Pagar</button>
+      <div class="estado">
+        <label><input type="radio" name="estado_${id}" value="pagada"> Factura pagada</label>
+        <label><input type="radio" name="estado_${id}" value="falta"> Falta pagar</label>
+      </div>
+    </div>`;
+  });
+  contenedor.appendChild(div);
+}
+
+function copiarYMostrar(codigo, url, id) {
+  const tempInput = document.createElement("textarea");
+  tempInput.value = codigo;
+  document.body.appendChild(tempInput);
+  tempInput.select();
+  document.execCommand("copy");
+  document.body.removeChild(tempInput);
+
+  // Obtener elementos y mostrar visor
+  const visor = document.getElementById("visor");
+  const titulo = document.getElementById("titulo-visor");
+  visor.style.display = "block";
+  titulo.style.display = "block";
+
+  // Obtener datos visibles desde el DOM
+  const item = document.querySelector(`[data-id="${id}"]`);
+  const tipo = item.querySelector(".tipo").textContent.trim();
+  const seccion = item.closest(".servicio").querySelector("h3").textContent.trim();
+
+  // Actualizar el título
+  titulo.textContent = `🔎 ${seccion} - ${tipo} - Código: ${codigo}`;
+
+  // Abrir enlace
+  visor.src = url;
+
+  // Guardar estado
+  localStorage.setItem("estado_" + id, "falta");
+  actualizarEstiloEstado(id, "falta");
+
+  // Alerta y scroll
+  alert("Código copiado. Puedes pegarlo en la página de abajo.");
+  setTimeout(() => {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth'
+    });
+  }, 100);
+}
+
+
+
+function cargarEstados() {
+  document.querySelectorAll(".item").forEach(item => {
+    const id = item.dataset.id;
+    const estado = localStorage.getItem("estado_" + id);
+    if (estado) {
+      const radio = item.querySelector("input[name='estado_" + id + "'][value='" + estado + "']");
+      if (radio) radio.checked = true;
+      actualizarEstiloEstado(id, estado);
+    }
+
+    item.querySelectorAll("input[type=radio]").forEach(radio => {
+      radio.addEventListener("change", () => {
+        localStorage.setItem("estado_" + id, radio.value);
+        actualizarEstiloEstado(id, radio.value);
+      });
+    });
+  });
+}
+
+function actualizarEstiloEstado(id, estado) {
+  const item = document.querySelector('[data-id="' + id + '"]');
+  if (item) {
+    item.classList.remove("pagada", "falta");
+    item.classList.add(estado);
   }
+}
+
+function automatizarFaltantes() {
+  const fecha = new Date();
+  const dia = fecha.getDate();
+
+  // GAS: día 11
+  if (dia === 11) {
+    const idsGas = [
+      "gas_casa", "gas_bodega_grande", "gas_bodega_pequena"
+    ];
+    idsGas.forEach(id => {
+      localStorage.setItem("estado_" + id, "falta");
+      const radio = document.querySelector("input[name='estado_" + id + "'][value='falta']");
+      if (radio) radio.checked = true;
+      actualizarEstiloEstado(id, "falta");
+    });
+  }
+
+  // AGUA: día 19
+  if (dia === 19) {
+    const idsAgua = [
+      "agua_casa", "agua_bodega_grande", "agua_bodega_pequena"
+    ];
+    idsAgua.forEach(id => {
+      localStorage.setItem("estado_" + id, "falta");
+      const radio = document.querySelector("input[name='estado_" + id + "'][value='falta']");
+      if (radio) radio.checked = true;
+      actualizarEstiloEstado(id, "falta");
+    });
+  }
+
+  // LUZ: día 8
+  if (dia === 8) {
+    const idsLuz = [
+      "luz_casa", "luz_bodega_grande", "luz_bodega_pequena"
+    ];
+    idsLuz.forEach(id => {
+      localStorage.setItem("estado_" + id, "falta");
+      const radio = document.querySelector("input[name='estado_" + id + "'][value='falta']");
+      if (radio) radio.checked = true;
+      actualizarEstiloEstado(id, "falta");
+    });
+  }
+}
+
+
+cargarEstados();
+automatizarFaltantes();
 </script>
 
 </body>
