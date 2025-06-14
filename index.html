@@ -91,6 +91,31 @@
       background-color: #f8d7da;
       border-left: 5px solid #dc3545;
     }
+
+  .toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #4CAF50, #2196F3);
+  color: #fff;
+  padding: 18px 26px;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  font-size: 17px;
+  font-weight: bold;
+  z-index: 9999;
+}
+.toast.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) scale(1.05);
+}
+
+
   </style>
 </head>
 <body>
@@ -105,11 +130,7 @@
 
 <script>
 const servicios = {
-  "Casa": [
-    ["🔥 Gas", "62990486", "https://pagosenlinea.grupovanti.com/", "gas_casa"],
-    ["💡 Luz", "4914", "https://www.essa.com.co/site/mi-factura/consulta-y-descarga-tu-factura/consulta-tu-factura", "luz_casa"],
-    ["💧 Agua", "004074", "https://www.amb.com.co:8444/amb/facturaambcel.aspx", "agua_casa"]
-  ],
+
   "Bodega Grande": [
     ["🔥 Gas", "00000", "https://pagosenlinea.grupovanti.com/", "gas_bodega_grande"],
     ["💡 Luz", "9847", "https://www.essa.com.co/site/mi-factura/consulta-y-descarga-tu-factura/consulta-tu-factura", "luz_bodega_grande"],
@@ -119,7 +140,15 @@ const servicios = {
     ["🔥 Gas", "62845149", "https://pagosenlinea.grupovanti.com/", "gas_bodega_pequena"],
     ["💡 Luz", "10403", "https://www.essa.com.co/site/mi-factura/consulta-y-descarga-tu-factura/consulta-tu-factura", "luz_bodega_pequena"],
     ["💧 Agua", "012785", "https://www.amb.com.co:8444/amb/facturaambcel.aspx", "agua_bodega_pequena"]
+  ],
+  "Casa": [
+    ["🔥 Gas", "62990486", "https://pagosenlinea.grupovanti.com/", "gas_casa"],
+    ["💡 Luz", "4914", "https://www.essa.com.co/site/mi-factura/consulta-y-descarga-tu-factura/consulta-tu-factura", "luz_casa"],
+    ["💧 Agua", "004074", "https://www.amb.com.co:8444/amb/facturaambcel.aspx", "agua_casa"]
   ]
+
+
+
 };
 
 const contenedor = document.getElementById("contenedor-servicios");
@@ -147,6 +176,7 @@ for (const [seccion, items] of Object.entries(servicios)) {
 }
 
 function copiarYMostrar(codigo, url, id) {
+  // Copiar al portapapeles
   const tempInput = document.createElement("textarea");
   tempInput.value = codigo;
   document.body.appendChild(tempInput);
@@ -154,29 +184,34 @@ function copiarYMostrar(codigo, url, id) {
   document.execCommand("copy");
   document.body.removeChild(tempInput);
 
-  // Obtener elementos y mostrar visor
+  // Obtener elementos de la interfaz
   const visor = document.getElementById("visor");
   const titulo = document.getElementById("titulo-visor");
-  visor.style.display = "block";
-  titulo.style.display = "block";
-
-  // Obtener datos visibles desde el DOM
   const item = document.querySelector(`[data-id="${id}"]`);
   const tipo = item.querySelector(".tipo").textContent.trim();
   const seccion = item.closest(".servicio").querySelector("h3").textContent.trim();
 
-  // Actualizar el título
+  // Mostrar encabezado con datos
+  titulo.style.display = "block";
   titulo.textContent = `🔎 ${seccion} - ${tipo} - Código: ${codigo}`;
 
-  // Abrir enlace
-  visor.src = url;
-
-  // Guardar estado
+  // Guardar estado como "falta pagar"
   localStorage.setItem("estado_" + id, "falta");
   actualizarEstiloEstado(id, "falta");
 
-  // Alerta y scroll
-  alert("Código copiado. Puedes pegarlo en la página de abajo.");
+  // Verificar si es factura de luz
+  const esLuz = tipo.toLowerCase().includes("luz");
+if (esLuz) {
+  window.open(url, '_blank');
+  mostrarToast("⚡ Código copiado. Se abrió una nueva pestaña para pagar la factura de luz.");
+} else {
+  visor.style.display = "block";
+  visor.src = url;
+  mostrarToast("✅ Código copiado. Puedes pegarlo en la página que se abrió abajo.");
+}
+
+
+  // Scroll al final
   setTimeout(() => {
     window.scrollTo({
       top: document.body.scrollHeight,
@@ -258,10 +293,23 @@ function automatizarFaltantes() {
   }
 }
 
+function mostrarToast(mensaje) {
+  const toast = document.getElementById("toast");
+  toast.innerHTML = mensaje;
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 3500);
+}
+
+
+
 
 cargarEstados();
 automatizarFaltantes();
 </script>
+<div id="toast" class="toast"></div>
 
 </body>
 </html>
